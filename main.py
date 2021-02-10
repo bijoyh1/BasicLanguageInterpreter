@@ -1,16 +1,88 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+f = open('code 1.txt','r')
+keytable = {
+    "END": "10000",
+    "FOR": "10001",
+    "NEXT": "10002",
+    "DATA": "10003",
+    "INPUT#": "10004",
+    "INPUT": "10005",
+    "DIM": "10006",
+    "READ": "10007",
+    "LET": "10008",
+    "GOTO": "10009",
+    "RUN": "10010",
+    "IF": "10011",
+    "RESTORE": "100012",
+    "GOSUB": "100013",
+    "RETURN": "10014",
+    "REM": "10015",
+    "STOP": "10016",
+    "ON": "10017",
+    "WAIT": "10018",
+    "LOAD": "10019",
+    "SAVE": "10020",
+    "VERIFY": "10021",
+    "DEF": "10022",
+    "POKE": "10023",
+    "PRINT#": "10024",
+    "PRINT": "10025",
+    "CONT": "10026",
+    "LIST": "10027",
+    "CLR": "10028",
+    "CMD": "10029",
+    "SYS": "10030",
+    "OPEN": "10031",
+    "CLOSE": "10032",
+    "GET": "10033",
+    "NEW": "10034",
+    "TAB(": "10035",
+    "TO": "10036",
+    "FN": "10037",
+    "SPC(": "10038",
+    "THEN": "10039",
+    "NOT": "10040",
+    "STEP": "10041",
+    "+": "10042",
+    "-": "10043",
+    "*": "10044",
+    "/": "10045",
+    "^": "10046",
+    "AND": "10047",
+    "OR": "10048",
+    ">": "10049",
+    "=": "10050",
+    "<": "10051",
+    "SGN": "10052",
+    "INT": "10053",
+    "ABS": "10054",
+    "USR": "10055",
+    "FRE": "10056",
+    "POS": "10057",
+    "SQR": "10058",
+    "RND": "10059",
+    "LOG": "10060",
+    "EXP": "10061",
+    "COS": "10062",
+    "SIN": "10063",
+    "TAN": "10064",
+    "ATN": "10065",
+    "PEEK": "10066",
+    "LEN": "10067",
+    "STR$": "10068",
+    "VAL": "10069",
+    "ASC": "10070",
+    "CHR$": "10071",
+    "LEFT$": "10072",
+    "RIGHT$": "10073",
+    "MID$": "100074",
+    "GO": "10075",
+}
+variables = {'x': 10}
+variableValues = {1000: 10}
+for line in f:
+    for word in line.split():
+        if word in keytable:
+            print(keytable[word],end=" ")
+        else:
+            print(word,end=" ")
+    print()
