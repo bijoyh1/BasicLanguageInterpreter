@@ -97,26 +97,27 @@ for line in f:
     for char in temp:
         if char in list1:
             #print("Char: " + char)
-            temp = temp.replace(char," " + char + " " )
+            temp = temp.replace(char," " + char + " ")
+            temp = temp.replace("  "," ")
     print(temp)
     g.write(temp)
 
-# for line in f:
-#     for word in line.split():
-#         if word == 'LET':
-#             Varible(varCount, line)
-#             varCount += 1
-#         if word in keytable:
-#             print(keytable[word], end=" ")
-#         elif word in variables:
-#             print(variables[word], end=" ")
-#         else:
-#             print(word, end=" ")
-#     print()
-#     currentLine += 1
-#
-# print(variables)
-# print(variableValues)
+for line in f:
+    for word in line.split():
+        if word == 'LET':
+            Varible(varCount, line)
+            varCount += 1
+        if word in keytable:
+            print(keytable[word], end=" ")
+        elif word in variables:
+            print(variables[word], end=" ")
+        else:
+            print(word, end=" ")
+    print()
+    currentLine += 1
+
+print(variables)
+print(variableValues)
 g.close()
 
 
