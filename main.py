@@ -1,4 +1,4 @@
-f = open('code 1.txt','r')
+f = open('code 1.txt', 'r')
 keytable = {
     "END": "10000",
     "FOR": "10001",
@@ -77,12 +77,59 @@ keytable = {
     "MID$": "100074",
     "GO": "10075",
 }
-variables = {'x': 10}
-variableValues = {1000: 10}
+varCount = 1000
+currentLine = 1
+variables = {}
+variableValues = {}
+
+
+def Varible(varCount, line):
+    print("ran func")
+    line = line.split()
+    variables[line[line.index('LET') + 1]] = varCount
+    variableValues[varCount] = line.index('LET') + 3
+
+
+g = open('code 1Edited.txt', 'w')
+list1 = ['(', ')', "-", '+', '=', '==', ':', "'", '"', '/']
 for line in f:
-    for word in line.split():
-        if word in keytable:
-            print(keytable[word],end=" ")
-        else:
-            print(word,end=" ")
-    print()
+    temp = line
+    for char in temp:
+        if char in list1:
+            #print("Char: " + char)
+            temp = temp.replace(char," " + char + " " )
+    print(temp)
+    g.write(temp)
+
+# for line in f:
+#     for word in line.split():
+#         if word == 'LET':
+#             Varible(varCount, line)
+#             varCount += 1
+#         if word in keytable:
+#             print(keytable[word], end=" ")
+#         elif word in variables:
+#             print(variables[word], end=" ")
+#         else:
+#             print(word, end=" ")
+#     print()
+#     currentLine += 1
+#
+# print(variables)
+# print(variableValues)
+g.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
