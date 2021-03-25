@@ -1,11 +1,10 @@
-10 REM compute the sum of integers with FOR loop (variable F and STEP)
-20 TEXT : HOME : PR#0
-25 LET D = 1 : F = 10
-30 FOR N=1 TO F STEP D
-40 LET S = S + N
-50 PRINT N,S,F
-60 LET D = D + 1 : F = F + 1
-70 NEXT N
-80 PRINT : REM print empty line
-90 PRINT "Final sum:";S
-100 END
+REM compute the sum of integers with FOR loop (variable F and STEP)
+LET D = 1 : F = 10
+FOR N=1 TO F STEP D
+LET S = S + N
+PRINT N,S,F
+LET D = D + 1 : F = F + 1
+NEXT N
+PRINT : REM print empty line
+PRINT "Final sum:";S
+END
