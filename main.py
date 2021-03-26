@@ -91,17 +91,25 @@ def Variable(varCount, line):
     line = line.split()
     variables[line[line.index('LET') + 1]] = varCount
     variableValues[varCount] = line[line.index('LET') + 3]
-
+def seperatecolon(line):
+    i = 0
+    while i < line.count(":"):
+        if i==0:
+            line0 = line
+        line1 = line0[0:line.find(":") - 1] + '\n'
+        line2 = line0[line.find(":") + 2:]
+        g.write(" " + line1)
+        if line2.count(":") == 0:
+            g.write(" " + line.split()[0] + " " + line2)
+        line0=line.split()[0] + " " + line2
+        i += 1
 
 # Inserts spaces to make file easier to read
 g = open('code 1Edited.txt', 'w')
 list1 = ['(', ')', "-", '+', '=', '==', ':', "'", '"', '/']
 for line in f:
     if ':' in line:
-        line1 = line[0:line.find(":") - 1] + '\n'
-        line2 = line[line.find(":") + 2:]
-        g.write(" " + line1)
-        g.write(" " +line.split()[0] + " " + line2)
+        seperatecolon(line)
     else:
         temp = line
         for char in temp:
