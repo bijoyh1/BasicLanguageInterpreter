@@ -1,10 +1,3 @@
-#
-# Class:       CS 4308 Section 2
-# Term:        Spring 2021
-# Name:        Bijoy Shah, Mahad Farah, Gordon Barnes
-# Instructor:   Deepa Muralidhar
-# Project:  Deliverable 1 Scanner - Python
-#
 f = open('code 1.txt', 'r')
 keytable = {
     "END": "10000",
@@ -108,7 +101,7 @@ for line in f:
         line1 = line[0:line.find(":") - 1] + '\n'
         line2 = line[line.find(":") + 2:]
         g.write(" " + line1)
-        g.write(" " + line2)
+        g.write(" " +line.split()[0] + " " + line2)
     else:
         temp = line
         for char in temp:
