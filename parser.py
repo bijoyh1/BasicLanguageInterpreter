@@ -83,27 +83,24 @@ g = open("code 1 Parsed.txt",'w')
 
 #Statement Types
 def let(x):
-    return str(x)
-
+    return ""
 
 def print_out(x):
-    pass
+    print(x)
+    return " -> <Print_statement> ->"
 
 
 def rem(x):
-    pass
+    return str(" -> <comment_statement> -> <literal_String>")
 
 
 def if_statement(x):
-    pass
-
-
-def for_statement(x):
-    pass
+    y =x[0:2] + x[x.index(keytable.get(')'))+1:]
+    return " -> <boolean_expression>"+ str(statement_type(y))
 
 
 def goto(x):
-    pass
+    return " -> <goto_statement> -> <literal_integer>\n<literal_integer> -> "+ x[3]
 
 
 #Expression Types
@@ -112,27 +109,27 @@ def goto(x):
 
 #Finds type of statement
 def statement_type(x):
-    if x[1] == keytable.get('LET'):
-        print("let")
+    if x[2] == keytable.get('LET'):
+        print("LET statment")
         return let(x)
-    elif x[1] == keytable.get('REM'):
-        print("ret")
-        return ""
-    elif x[1] == keytable.get('PRINT'):
-        print("print")
-        print_out(x)
-    elif x[1] == keytable.get('IF'):
-        if_statement(x)
-    elif x[1] == keytable.get('GOTO'):
-        goto(x)
-    elif x[1] == keytable.get('FOR'):
-        for_statement(x)
+    elif x[2] == keytable.get('REM'):
+        print("REM statment")
+        return rem(x)
+    elif x[2] == keytable.get('PRINT'):
+        print("PRINT statment")
+        return print_out(x)
+    elif x[2] == keytable.get('IF'):
+        print("IF statment")
+        return if_statement(x)
+    elif x[2] == keytable.get('GOTO'):
+        print("GOTO statment")
+        return goto(x)
     return ""
 
 
 def create_grammar(x):
     parse_string = "<block> -> <statement>"
-    parse_string = parse_string + statement_type(x)    
+    parse_string = parse_string + statement_type(x)
     print(parse_string)
 
 
