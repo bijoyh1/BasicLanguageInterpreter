@@ -78,6 +78,11 @@ keytable = {
     "(": "10076",
     ")": "10077"
 }
+variables = {
+    'MAX': 20000,
+    'X': 20001,
+    'Y': 20002
+}
 f = open("code 1 Final.txt",'r')
 g = open("code 1 Parsed.txt",'w')
 
