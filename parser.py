@@ -86,7 +86,6 @@ def let(x):
     return ""
 
 def print_out(x):
-    print(x)
     return " -> <Print_statement> ->"
 
 
@@ -102,7 +101,17 @@ def if_statement(x):
 def goto(x):
     return " -> <goto_statement> -> <literal_integer>\n<literal_integer> -> "+ x[3]
 
+def arithmetic_statement(x):
+    return ""
 
+def literal_string(x):
+    return ""
+
+def literal_variable(x):
+    return ""
+
+def literal_integer(x):
+    return ""
 #Expression Types
 
 
@@ -124,6 +133,18 @@ def statement_type(x):
     elif x[2] == keytable.get('GOTO'):
         print("GOTO statment")
         return goto(x)
+    elif ADD CODE HERE:
+        print("arithmetic statement")
+        return arithmetic_statement(x)
+    elif ADD CODE HERE:
+        print("Literal String")
+        return literal_string(x)
+    elif ADD CODE HERE:
+        print("literal Variable")
+        return literal_variable(x)
+    elif ADD CODE HERE:
+        print("literal Integer")
+        return literal_integer(x)
     return ""
 
 
