@@ -96,7 +96,7 @@ def rem(x):
 
 def if_statement(x):
     y =x[0:2] + x[x.index(keytable.get(')'))+1:]
-    return " -> <boolean_expression>" + str(statement_type(y)) + str(statement_type(y))
+    return " -> <boolean_expression>"+ str(statement_type(y))
 
 
 def goto(x):
