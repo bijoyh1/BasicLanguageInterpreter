@@ -83,10 +83,25 @@ variables = {
     'X': 20001,
     'Y': 20002
 }
+operators = {'+', '-', '*', '/', '^'}
+
 f = open("code 1 Final.txt",'r')
 g = open("code 1 Parsed.txt",'w')
 
-#Statement Types
+
+def get_key_variables(x):
+    for key, value in variables.items():
+         if x == value:
+             return key
+
+
+def get_key_keytable(x):
+    for key, value in keytable.items():
+         if x == value:
+             return key
+
+
+# Statement Types
 def let(x):
     return ""
 
@@ -106,22 +121,41 @@ def if_statement(x):
 def goto(x):
     return " -> <goto_statement> -> <literal_integer>\n<literal_integer> -> "+ x[3]
 
-def arithmetic_statement(x):
-    return ""
 
-def literal_string(x):
-    return ""
+def assignment_statement(x):
+    y = x[0:2] + x[x.index(keytable.get('='))+1:]
+    return " -> <assignment_statement> -> id <eq_operator> <arithmetic_expression>\n<eq_operator> -> =" \
+            + str(statement_type(y)) \
+            + "\nid -> " + list(variables.keys())[list(variables.values()).index(int(x[2]))]
+
+
+def arithmetic_statement(x):
+    operator = ''
+    index = 0
+    for op in operators:
+        if keytable.get(op) in x:
+            operator = op
+            index = x[x.index(keytable.get(op))]
+            break
+
+    y = x[0:x.index(keytable.get(operator))]
+    z = x[0:2] + x[x.index(keytable.get(operator)) + 1:]
+    return "\n<arithmetic_statement> -> <arithmetic_statement> <operator> <arithmetic_statement>\n" + str(statement_type(y)) \
+           + "\n<operator> -> " + operator \
+           + str(statement_type(z))
+
 
 def literal_variable(x):
-    return ""
+    return "-> <literal_variable>\n<literal_variable> -> " + get_key_variables(int(x[2])) + "\n"
+
 
 def literal_integer(x):
-    return ""
-#Expression Types
+    return "-> <literal_integer>\n<literal_integer> -> " + x[2]+ "\n"
 
 
+# Expression Types
 
-#Finds type of statement
+# Finds type of statement
 def statement_type(x):
     if x[2] == keytable.get('LET'):
         print("LET statment")
@@ -138,16 +172,16 @@ def statement_type(x):
     elif x[2] == keytable.get('GOTO'):
         print("GOTO statment")
         return goto(x)
-    elif ADD CODE HERE:
+    elif int(x[2]) in variables.values() and len(x) >= 4 and x[3] == keytable.get('='):
+        print("assignment statement")
+        return assignment_statement(x)
+    elif keytable.get('+') in x or keytable.get('-') in x or keytable.get('/') in x or keytable.get('*') in x or keytable.get('^') in x:
         print("arithmetic statement")
         return arithmetic_statement(x)
-    elif ADD CODE HERE:
-        print("Literal String")
-        return literal_string(x)
-    elif ADD CODE HERE:
+    elif int(x[2]) in variables.values():
         print("literal Variable")
         return literal_variable(x)
-    elif ADD CODE HERE:
+    elif x[2] not in keytable.keys() or x[2] not in variables.values():
         print("literal Integer")
         return literal_integer(x)
     return ""
@@ -156,7 +190,8 @@ def statement_type(x):
 def create_grammar(x):
     parse_string = "<block> -> <statement>"
     parse_string = parse_string + statement_type(x)
-    print(parse_string)
+    print("Line: " + x[1])
+    print(parse_string,end="")
 
 
 for x in f:
