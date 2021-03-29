@@ -87,6 +87,7 @@ operators = {'+', '-', '*', '/', '^'}
 f = open("code 1 Final.txt",'r')
 g = open("code 1 Parsed.txt",'w')
 
+#search dictionary
 def get_key_variables(x):
     for key, value in variables.items():
          if x == value:
@@ -95,6 +96,13 @@ def get_key_keytable(x):
     for key, value in keytable.items():
          if x == value:
              return key
+def indentify(x):
+    if x in keytable.values():
+        return get_key_keytable(x)
+    elif int(x) in variables.values():
+        return str(get_key_variables(int(x)))
+    else:
+        return x
 #Statement Types
 def let(x):
     y = x[0:2] + x[3:]
@@ -148,7 +156,7 @@ def boolean_statement(x):
     return statement_type(x[0:3]) + " -> <boolean_operator>\n<boolean_operator> -> " + get_key_keytable(x[3]) + "\n" + statement_type(x[0:2] + x[4:])
 
 def end(x):
-    return "-> <Command>\n<Command> -> END"
+    return "-> <end_statement>\n<end_statement> -> END"
 #Expression Types
 
 
@@ -178,6 +186,25 @@ def statement_type(x):
         return literal_integer(x)
     return ""
 
+def prefix(x):
+    if x[2] == keytable.get('LET'):
+        y = indentify(x[4])+ indentify(x[3]) + indentify(x[5])
+        return y
+    elif x[2] == keytable.get('PRINT'):
+        y = indentify(x[3])
+        return y
+    elif x[2] == keytable.get('IF'):
+        y = indentify(x[5]) + indentify(x[4]) + indentify(x[6]) + str(prefix(x[6:]))
+        return y
+    elif x[2] == keytable.get('GOTO'):
+        y = indentify(x[3])
+        return y
+
+def create_prefix(x):
+    prefix_string = ""
+    prefix_string = prefix_string + str(prefix(x))
+    print(prefix_string,end="")
+
 def create_grammar(x):
     parse_string = "<block> -> <statement>"
     parse_string = parse_string + statement_type(x)
@@ -187,4 +214,5 @@ def create_grammar(x):
 for x in f:
     x = x.split(" ")
     create_grammar(x)
+    create_prefix(x)
     print()
