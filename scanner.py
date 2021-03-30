@@ -1,3 +1,4 @@
+
 f = open('code 1.txt', 'r')
 keytable = {
     "END": "10000",
@@ -63,7 +64,7 @@ keytable = {
     "LOG": "10060",
     "EXP": "10061",
     "COS": "10062",
-    #"SIN": "10063",
+    # "SIN": "10063",
     "TAN": "10064",
     "ATN": "10065",
     "PEEK": "10066",
@@ -85,13 +86,24 @@ variables = {}
 variableValues = {}
 tokensScanned = {}
 
-
-
 # Finds and adds variables to variable dictionaries and adds variable values to variable value dictionary
+def VariablesToFile():
+    dict = open("variable Dictionary.txt",'w')
+    dict.write(str(variables))
+    dict.close()
+    dict = open("variable Value Dictionary.txt", 'w')
+    dict.write(str(variableValues))
+    dict.close()
+
+
+
+
 def Variable(varCount, line):
     line = line.split()
     variables[line[line.index('LET') + 1]] = varCount
     variableValues[varCount] = line[line.index('LET') + 3]
+
+
 def seperatecolon(line):
     i = 0
     while i < line.count(":"):
@@ -104,45 +116,41 @@ def seperatecolon(line):
             g.write(" " + line.split()[0] + " " + line2)
         line0=line.split()[0] + " " + line2
         i += 1
-
-if __name__ == '__main__':
-    # Inserts spaces to make file easier to read
-    g = open('code 1Edited.txt', 'w')
-    list1 = ['(', ')', "-", '+', '=', '==', ':', "'", '"', '/']
-    for line in f:
-        if ':' in line:
-            seperatecolon(line)
-        else:
-            temp = line
-            for char in temp:
-                if char in list1:
-                    temp = temp.replace(char, " " + char + " ")
-                    temp = temp.replace("  ", " ")
-            g.write(" " + temp)
-    f.close()
-    g.close()
-
-    # Converts all keywords to numbers
-    f = open('code 1Edited.txt', 'r')
-    h = open('code 1 Final.txt', 'w')
-    for line in f:
+# Inserts spaces to make file easier to read
+g = open('code 1Edited.txt', 'w')
+list1 = ['(', ')', "-", '+', '=', '==', ':', "'", '"', '/']
+for line in f:
+    if ':' in line:
+        seperatecolon(line)
+    else:
         temp = line
-        for word in temp.split():
-            if word == 'LET':
-                Variable(varCount, line)
-                varCount += 1
-            if word in keytable:
-                temp = temp.replace(word, keytable[word])
-                tokensScanned[word] = keytable[word]
-            elif word in variables:
-                temp = temp.replace(" " + word, " " + str(variables[word]))
-        h.write(temp)
-        currentLine += 1
-    print(variables)
-    print(variableValues)
-    print(tokensScanned)
-    h.close()
-    g.close()
+        for char in temp:
+            if char in list1:
+                temp = temp.replace(char, " " + char + " ")
+                temp = temp.replace("  ", " ")
+        g.write(" " + temp)
+f.close()
 
-def returnVariables():
-    return variables
+g.close()
+# Converts all keywords to numbers
+f = open('code 1Edited.txt', 'r')
+h = open('code 1 Final.txt', 'w')
+for line in f:
+    temp = line
+    for word in temp.split():
+        if word == 'LET':
+            Variable(varCount, line)
+            varCount += 1
+        if word in keytable:
+            temp = temp.replace(word,keytable[word])
+            tokensScanned[word] = keytable[word]
+        elif word in variables:
+            temp = temp.replace(" " + word, " " + str(variables[word]))
+    h.write(temp)
+    currentLine += 1
+print(variables)
+print(variableValues)
+print(tokensScanned)
+h.close()
+g.close()
+VariablesToFile()
