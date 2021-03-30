@@ -78,14 +78,43 @@ keytable = {
     "(": "10076",
     ")": "10077"
 }
-variables = {
-    'MAX': 20000,
-    'X': 20001,
-    'Y': 20002
-}
+variables = {}
+variablesValue = {}
 operators = {'+', '-', '*', '/', '^'}
 f = open("code 1 Final.txt",'r')
 g = open("code 1 Parsed.txt",'w')
+
+#Line Count
+lines = f.read().splitlines()
+last_line = lines[-1]
+totalLines = last_line.split(" ")
+totalLines = totalLines[1]
+f.close()
+f = open("code 1 Final.txt", 'r')
+
+# Errors Explanation
+LETERROR = "There is a let error. There is no assignment operator after the word let"
+PRINTERROR = "The variable after PRINT doesn't exist. "
+GOTOERROR = "The GOTO line doesn't exist."
+VARIABLESERROR = "The variable doesn't exist"
+ENDERROR = "There is no end token at the end of the file"
+
+# Error Catching
+def checkEndError():
+    if last_line.split(" ")[2] != keytable.get("END"):
+        print(ENDERROR)
+
+def errorCatching(x):
+    if x[2] == keytable.get('LET'):
+        if x[4] != keytable.get("="):
+            print("There error occurred on line: " + str(x[1]))
+            print(LETERROR)
+            return
+    elif x[2] == keytable.get('PRINT'):
+        if x[3] not in variables.keys():
+            return PRINTERROR
+    elif x[2] == keytable.get('IF'):
+        return if_statement(x)
 
 #search dictionary
 def get_key_variables(x):
@@ -103,6 +132,7 @@ def indentify(x):
         return str(get_key_variables(int(x)))
     else:
         return x
+
 #Statement Types
 def let(x):
     y = x[0:2] + x[3:]
@@ -147,7 +177,10 @@ def arithmetic_statement(x):
            + str(statement_type(z))
 
 def literal_variable(x):
-    return "-> <literal_variable>\n<literal_variable> -> " + get_key_variables(int(x[2])) + "\n"
+    if get_key_variables(int(x[2])) not in variables.keys():
+        return VARIABLESERROR
+    else:
+        return "-> <literal_variable>\n<literal_variable> -> " + get_key_variables(int(x[2])) + "\n"
 
 def literal_integer(x):
     return "-> <literal_integer>\n<literal_integer> -> " + x[2] + "\n"
@@ -157,12 +190,10 @@ def boolean_statement(x):
 
 def end(x):
     return "-> <end_statement>\n<end_statement> -> END\n"
-#Expression Types
-
-
 
 #Finds type of statement
 def statement_type(x):
+    errorCatching(x)
     if x[2] == keytable.get('END'):
         return end(x)
     elif x[2] == keytable.get('LET'):
@@ -174,6 +205,8 @@ def statement_type(x):
     elif x[2] == keytable.get('IF'):
         return str(if_statement(x))
     elif x[2] == keytable.get('GOTO'):
+        if int(x[3]) > int(totalLines):
+            print(GOTOERROR)
         return goto(x)
     elif int(x[2]) in variables.values() and len(x) >= 4 and x[3] == keytable.get('='):
         return assignment_statement(x)
@@ -214,21 +247,49 @@ def prefix(x):
             y = indentify(x[3]) + indentify(x[2]) + indentify(x[4])
             return y
 
+# Imports variables from scanner
+def importDictionary():
+    dict = open("variable Dictionary.txt", 'r')
+    x = dict.read()
+    x = x.replace("{", "")
+    x = x.replace("}", "")
+    x = x.replace("'", "")
+    x = x.replace(":", "")
+    x = x.replace(",", "")
+    splitX = x.split(" ")
+    for y in range(0,len(splitX),2):
+        variables[splitX[y]] = int(splitX[y+1])
+
+    dict = open("variable Value Dictionary.txt", 'r')
+    x = dict.read()
+    x = x.replace("{", "")
+    x = x.replace("}", "")
+    x = x.replace("'", "")
+    x = x.replace(":", "")
+    x = x.replace(",", "")
+    splitX = x.split(" ")
+    for y in range(0, len(splitX), 2):
+        variablesValue[splitX[y]] = int(splitX[y + 1])
+
+#Makes the prefix for each line
 def create_prefix(x):
     prefix_string = ""
     prefix_string = prefix_string + str(prefix(x))
     print("Prefix for Line " + x[1] + ": ")
     print(prefix_string,end="")
     print()
-
+#Makes the grammer for each line
 def create_grammar(x):
     parse_string = "<block> -> <statement>"
     parse_string = parse_string + statement_type(x)
     print("Line: " + x[1])
     print(parse_string,end="")
 
+#Starts the Prefix and Grammer loops.
+importDictionary()
+checkEndError()
 for x in f:
     x = x.split(" ")
     create_grammar(x)
     create_prefix(x)
-    print(" ")
+    print()
