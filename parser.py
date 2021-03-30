@@ -113,7 +113,7 @@ def print_out(x):
     return " -> <print_statement>" + statement_type(y)
 
 def rem(x):
-    return " -> <comment_statement> -> <literal_String>\n<literal_String> -> " + " ".join(x[3:])
+    return " -> <comment_statement> -> <literal_String>\n<literal_String> -> " + " ".join(x[3:]) + "\n"
 
 def if_statement(x):
     y =x[0:2] + x[x.index(keytable.get(')'))+1:]
@@ -156,7 +156,7 @@ def boolean_statement(x):
     return statement_type(x[0:3]) + " -> <boolean_operator>\n<boolean_operator> -> " + get_key_keytable(x[3]) + "\n" + statement_type(x[0:2] + x[4:])
 
 def end(x):
-    return "-> <end_statement>\n<end_statement> -> END"
+    return "-> <end_statement>\n<end_statement> -> END\n"
 #Expression Types
 
 
@@ -199,11 +199,27 @@ def prefix(x):
     elif x[2] == keytable.get('GOTO'):
         y = indentify(x[3])
         return y
+    elif x[2] == keytable.get('REM'):
+        y = "Comment Statement no prefix\n"
+        return y
+    elif x[2] == keytable.get('END'):
+        y = "END Statement no prefix\n"
+        return y
+    elif int(x[2]) in variables.values():
+        if x[3] == keytable.get('='):
+            t = x[0:2] + x[4:]
+            y = indentify(x[3]) + indentify(x[2]) + str(prefix(t))
+            return y
+        else:
+            y = indentify(x[3]) + indentify(x[2]) + indentify(x[4])
+            return y
 
 def create_prefix(x):
     prefix_string = ""
     prefix_string = prefix_string + str(prefix(x))
+    print("Prefix for Line " + x[1] + ": ")
     print(prefix_string,end="")
+    print()
 
 def create_grammar(x):
     parse_string = "<block> -> <statement>"
@@ -215,4 +231,4 @@ for x in f:
     x = x.split(" ")
     create_grammar(x)
     create_prefix(x)
-    print()
+    print(" ")
