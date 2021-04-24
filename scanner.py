@@ -1,4 +1,4 @@
-
+#NEWEST
 f = open('code 1.txt', 'r')
 keytable = {
     "END": "10000",
@@ -86,16 +86,15 @@ variables = {}
 variableValues = {}
 tokensScanned = {}
 
+
 # Finds and adds variables to variable dictionaries and adds variable values to variable value dictionary
 def VariablesToFile():
-    dict = open("variable Dictionary.txt",'w')
+    dict = open("variable Dictionary.txt", 'w')
     dict.write(str(variables))
     dict.close()
     dict = open("variable Value Dictionary.txt", 'w')
     dict.write(str(variableValues))
     dict.close()
-
-
 
 
 def Variable(varCount, line):
@@ -107,21 +106,41 @@ def Variable(varCount, line):
 def seperatecolon(line):
     i = 0
     while i < line.count(":"):
-        if i==0:
+        if i == 0:
             line0 = line
         line1 = line0[0:line.find(":") - 1] + '\n'
         line2 = line0[line.find(":") + 2:]
         g.write(" " + line1)
         if line2.count(":") == 0:
             g.write(" " + line.split()[0] + " " + line2)
-        line0=line.split()[0] + " " + line2
+        line0 = line.split()[0] + " " + line2
         i += 1
+
+
+def seperatecomma(line):
+    i = 0
+    line = line.replace(",", " , ")
+    print(line)
+    while i < line.count(","):
+        if i == 0:
+            line0 = line
+        line1 = line0[0:line.find(",") - 1] + '\n'
+        line2 = "PRINT " + line0[line.find(",") + 2:]
+        g.write(" " + line1)
+        if line2.count(",") == 0:
+            g.write(" " + line.split()[0] + " " + line2)
+        line0 = line.split()[0] + " " + line2
+        i += 1
+
+
 # Inserts spaces to make file easier to read
 g = open('code 1Edited.txt', 'w')
 list1 = ['(', ')', "-", '+', '=', '==', ':', "'", '"', '/']
 for line in f:
     if ':' in line:
         seperatecolon(line)
+    elif ',' in line:
+        seperatecomma(line)
     else:
         temp = line
         for char in temp:
@@ -130,8 +149,8 @@ for line in f:
                 temp = temp.replace("  ", " ")
         g.write(" " + temp)
 f.close()
-
 g.close()
+
 # Converts all keywords to numbers
 f = open('code 1Edited.txt', 'r')
 h = open('code 1 Final.txt', 'w')
@@ -142,7 +161,7 @@ for line in f:
             Variable(varCount, line)
             varCount += 1
         if word in keytable:
-            temp = temp.replace(word,keytable[word])
+            temp = temp.replace(word, keytable[word])
             tokensScanned[word] = keytable[word]
         elif word in variables:
             temp = temp.replace(" " + word, " " + str(variables[word]))
