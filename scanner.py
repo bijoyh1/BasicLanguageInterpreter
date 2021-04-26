@@ -100,7 +100,7 @@ def VariablesToFile():
 def Variable(varCount, line):
     line = line.split()
     variables[line[line.index('LET') + 1]] = varCount
-    variableValues[varCount] = line[line.index('LET') + 3]
+    variableValues[varCount] = str(line[line.index('LET') + 3])
 
 
 def seperatecolon(line):
@@ -136,11 +136,30 @@ def seperatecomma(line):
 # Inserts spaces to make file easier to read
 g = open('code 1Edited.txt', 'w')
 list1 = ['(', ')', "-", '+', '=', '==', ':', "'", '"', '/']
+
+def seperateLET(line):
+    print("Running seperate Line")
+    print(line)
+    line1 = line[:11] + '0\n'
+    line2 = line[:3] + line[7:]
+    for char in line2:
+        if char in list1:
+            line2 = line2.replace(char, " " + char + " ")
+            line2 = line2.replace("  ", " ")
+    print("Line1:" + line1)
+    print("Line2:" + line2)
+    g.write(" " + line1)
+    g.write(" " + line2)
+    #line0 = line.split()[0] + " " + line2
+    #i += 1
+
 for line in f:
     if ':' in line:
         seperatecolon(line)
     elif ',' in line:
         seperatecomma(line)
+    elif 'LET' in line and len(line.split(" ")) != 5:
+        seperateLET(line)
     else:
         temp = line
         for char in temp:
