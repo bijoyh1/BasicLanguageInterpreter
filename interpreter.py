@@ -1,14 +1,8 @@
-code = [
-    ["assignment", "N = 3"],
-    ["assignment", "S = 0"],
-    ["assignment", "S = 0"],
-    ["arithmetic", "S = S + N"],
-    ["Print", "N"],
-    ["Print", "S"],
-    ["assignment", "B = 0"],
-    ["arithmetic", "B = S - INT ( N / 2 ) * 2"],
-    ["Print", "B"],
-]
+code = []
+f = open("code 1 interpret.txt",'r')
+for x in f.read().splitlines():
+    x=x.split(" ")
+    code.append([x[0]," ".join(x[1:])])
 
 variables = {'N': 20000, 'S': 20001, 'B': 20002}
 variablesValue = {20000: '', 20001: '', 20002: ''}
