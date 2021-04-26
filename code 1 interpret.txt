@@ -1,0 +1,9 @@
+assignment N = 3
+assignment S = 0
+assignment S = 0
+arithmetic S = S + N
+Print N
+Print S
+assignment B = 0
+arithmetic B = S - INT ( N / 2 ) * 2
+Print B
