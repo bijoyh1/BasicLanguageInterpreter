@@ -1,0 +1,11 @@
+assignment  A = 5
+assignment  B = 0
+arithmetic B = A - INT ( A / 2 ) * 2
+Print B
+assignment  X = 0
+assignment  P = 0
+assignment  X = 0
+arithmetic X = B * P + X
+assignment  P = 0
+arithmetic P = P * 10
+Print P
