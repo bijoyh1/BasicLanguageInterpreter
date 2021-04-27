@@ -1,4 +1,4 @@
-#NEWEST
+# NEWEST
 import sys
 
 f = open('output.txt', 'w')
@@ -68,7 +68,7 @@ keytable = {
     "LOG": "10060",
     "EXP": "10061",
     "COS": "10062",
-    #"SIN": "10063",
+    # "SIN": "10063",
     "TAN": "10064",
     "ATN": "10065",
     "PEEK": "10066",
@@ -84,13 +84,34 @@ keytable = {
     "(": "10076",
     ")": "10077"
 }
-variables = {'N': 20000, 'S': 20002}
-variablesValue = {20000: '2', 20001: '0', 20002: 'S'}
-operators = {'+', '-', '*', '/', '^'}
-f = open("code 1 Final.txt",'r')
-#g = open("code1error.txt",'w')
+variables = {}
+variablesValue = {}
+g = open("variable Dictionary.txt",'r')
+var = g.read()
+var = var.replace(":", "").replace("'", "").replace("{", "").replace("}", "").replace(",", "")
+var = var.split(" ")
+i = 0
+j = 1
+for x in range(0,len(var), 2):
+    variables[var[i]] = var[j]
+    i = i+2
+    j = j+2
 
-#Line Count
+z = open("variable Value Dictionary.txt",'r')
+var = z.read()
+var = var.replace(":", "").replace("'", "").replace("{", "").replace("}", "").replace(",", "")
+var = var.split(" ")
+i = 0
+j = 1
+for x in range(0,len(var), 2):
+    variablesValue[var[i]] = var[j]
+    i = i+2
+    j = j+2
+
+operators = {'+', '-', '*', '/', '^'}
+f = open("code 1 Final.txt", 'r')
+
+# Line Count
 lines = f.read().splitlines()
 last_line = lines[-1]
 totalLines = last_line.split(" ")
@@ -109,14 +130,16 @@ VARIABLESERROR = "The variable doesn't exist. The variable must first be declare
 ENDERROR = "There is no end token at the end of the file. The file doesn't have an END at end. It is needed to tell " \
            "the program when to stop running. "
 
+
 # Error Catching
 def checkEndError():
-    if len(last_line.split(" "))< 3 or last_line.split(" ")[2] != keytable.get("END"):
-        print("Line "+ last_line.split(" ")[1])
+    if len(last_line.split(" ")) < 3 or last_line.split(" ")[2] != keytable.get("END"):
+        print("Line " + last_line.split(" ")[1])
         print("Token: 10000")
         print("<block> -> <statement>-> <end_statement> <end_statement> -> END")
         print(last_line.split(" "))
         print(ENDERROR)
+
 
 def errorCatching(x):
     if x[2] == keytable.get('LET'):
@@ -128,7 +151,13 @@ def errorCatching(x):
             print(LETERROR)
             return
     elif x[2] == keytable.get('PRINT'):
-        if x[3] not in variables.keys():
+        print("Print line ")
+        temp = x[3]
+        temp = temp[:-1]
+        #print("temp " + temp)
+        #print(len(temp))
+        print(variables.values())
+        if int(temp) not in variables.values():
             print("Line " + x[1])
             print("Token: 10028")
             print("block> -> <statement> -> <print_statement>")
@@ -143,15 +172,20 @@ def errorCatching(x):
         print(PRINTERROR)
         return if_statement(x)
 
-#search dictionary
+
+# search dictionary
 def get_key_variables(x):
     for key, value in variables.items():
-         if x == value:
-             return key
+        if x == value:
+            return key
+
+
 def get_key_keytable(x):
     for key, value in keytable.items():
-         if x == value:
-             return key
+        if x == value:
+            return key
+
+
 def indentify(x):
     if x in keytable.values():
         return get_key_keytable(x)
@@ -160,32 +194,39 @@ def indentify(x):
     else:
         return x
 
-#Statement Types
+
+# Statement Types
 def let(x):
     y = x[0:2] + x[3:]
     return " -> <declaring_statement>" + assignment_statement(y)
+
 
 def print_out(x):
     y = x[0:2] + x[3:]
     return " -> <print_statement>" + statement_type(y)
 
+
 def rem(x):
     return " -> <comment_statement> -> <literal_String>\n<literal_String> -> " + " ".join(x[3:]) + "\n"
 
+
 def if_statement(x):
-    y =x[0:2] + x[x.index(keytable.get(')'))+1:]
-    t =x[0:2] + x[x.index(keytable.get('('))+1:x.index(keytable.get(')'))]
+    y = x[0:2] + x[x.index(keytable.get(')')) + 1:]
+    t = x[0:2] + x[x.index(keytable.get('(')) + 1:x.index(keytable.get(')'))]
     return " -><if_statement> -> <boolean_expression>" + str(boolean_statement(t)) + str(statement_type(y))
 
+
 def goto(x):
-    y= x[0:2] + x[3:]
+    y = x[0:2] + x[3:]
     return " -> <goto_statement>" + str(statement_type(y))
 
+
 def assignment_statement(x):
-    y = x[0:2] + x[x.index(keytable.get('='))+1:]
+    y = x[0:2] + x[x.index(keytable.get('=')) + 1:]
     t = x[0:3]
-    return " -> <assignment_statement> -> <Literal_variable> <eq_operator> <arithmetic_expression>\n" + statement_type(t) + "<eq_operator> -> =\n" \
-            + str(statement_type(y))
+    return " -> <assignment_statement> -> <Literal_variable> <eq_operator> <arithmetic_expression>\n" + statement_type(
+        t) + "<eq_operator> -> =\n" \
+           + str(statement_type(y))
 
 
 def arithmetic_statement(x):
@@ -199,9 +240,11 @@ def arithmetic_statement(x):
 
     y = x[0:x.index(keytable.get(operator))]
     z = x[0:2] + x[x.index(keytable.get(operator)) + 1:]
-    return "<arithmetic_statement> -> <arithmetic_statement> <operator> <arithmetic_statement>\n" + str(statement_type(y)) \
-           + "<operator> -> " + operator + "\n"\
+    return "<arithmetic_statement> -> <arithmetic_statement> <operator> <arithmetic_statement>\n" + str(
+        statement_type(y)) \
+           + "<operator> -> " + operator + "\n" \
            + str(statement_type(z))
+
 
 def literal_variable(x):
     if get_key_variables(int(x[2])) not in variables.keys():
@@ -213,16 +256,21 @@ def literal_variable(x):
     else:
         return "-> <literal_variable>\n<literal_variable> -> " + get_key_variables(int(x[2])) + "\n"
 
+
 def literal_integer(x):
     return "-> <literal_integer>\n<literal_integer> -> " + x[2] + "\n"
 
+
 def boolean_statement(x):
-    return statement_type(x[0:3]) + " -> <boolean_operator>\n<boolean_operator> -> " + get_key_keytable(x[3]) + "\n" + statement_type(x[0:2] + x[4:])
+    return statement_type(x[0:3]) + " -> <boolean_operator>\n<boolean_operator> -> " + get_key_keytable(
+        x[3]) + "\n" + statement_type(x[0:2] + x[4:])
+
 
 def end(x):
     return "-> <end_statement>\n<end_statement> -> END\n"
 
-#Finds type of statement
+
+# Finds type of statement
 def statement_type(x):
     errorCatching(x)
     if x[2] == keytable.get('END'):
@@ -253,9 +301,10 @@ def statement_type(x):
         return literal_integer(x)
     return ""
 
+
 def prefix(x):
     if x[2] == keytable.get('LET'):
-        y = indentify(x[4])+ indentify(x[3]) + indentify(x[5])
+        y = indentify(x[4]) + indentify(x[3]) + indentify(x[5])
         return y
     elif x[2] == keytable.get('PRINT'):
         y = indentify(x[3])
@@ -281,6 +330,7 @@ def prefix(x):
             y = indentify(x[3]) + indentify(x[2]) + indentify(x[4])
             return y
 
+
 # Imports variables from scanner
 def importDictionary():
     dict = open("variable Dictionary.txt", 'r')
@@ -291,8 +341,8 @@ def importDictionary():
     x = x.replace(":", "")
     x = x.replace(",", "")
     splitX = x.split(" ")
-    for y in range(0,len(splitX),2):
-        variables[splitX[y]] = int(splitX[y+1])
+    for y in range(0, len(splitX), 2):
+        variables[splitX[y]] = int(splitX[y + 1])
 
     dict = open("variable Value Dictionary.txt", 'r')
     x = dict.read()
@@ -305,25 +355,51 @@ def importDictionary():
     for y in range(0, len(splitX), 2):
         variablesValue[splitX[y]] = int(splitX[y + 1])
 
-#Makes the prefix for each line
+
+# Makes the prefix for each line
 def create_prefix(x):
     prefix_string = ""
     prefix_string = prefix_string + str(prefix(x))
     print("Prefix for Line " + x[1] + ": ")
-    print(prefix_string,end="")
+    print(prefix_string, end="")
     print()
-#Makes the grammer for each line
+
+
+# Makes the grammer for each line
 def create_grammar(x):
     parse_string = "<block> -> <statement>"
     parse_string = parse_string + statement_type(x)
     print("Line: " + x[1])
-    print(parse_string,end="")
+    print(parse_string, end="")
 
-#Starts the Prefix and Grammer loops.
-#import Dictionary()
+
+# Create Interpreter file
+
+def create_for_interpreter():
+    m = open("code 1Edited.txt", 'r')
+    g = open("code 1 interpret.txt", 'w')
+
+    for line in m:
+        line1 = line.split(" ")
+        if line1[2] == "LET":
+            temp = line[7:]
+            g.write("assignment " + temp)
+        elif line1[2] == "PRINT":
+            temp = line[9:]
+            g.write("Print" + temp)
+        elif line1[2] == "END\n" or line1[2] == "END":
+            pass
+        else:
+            if line1[2] != " END":
+                g.write("arithmetic" + line[3:])
+    m.close()
+    g.close()
+
+
+# Starts the Prefix and Grammer loops.
 checkEndError()
 for x in f:
     x = x.split(" ")
     create_grammar(x)
     create_prefix(x)
-    print()
+create_for_interpreter()
