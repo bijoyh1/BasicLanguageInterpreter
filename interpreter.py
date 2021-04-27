@@ -4,8 +4,18 @@ for x in f.read().splitlines():
     x=x.split(" ")
     code.append([x[0]," ".join(x[1:])])
 
-variables = {'N': 20000, 'S': 20001, 'B': 20002}
-variablesValue = {20000: '', 20001: '', 20002: ''}
+variables = {}
+variablesValue = {}
+g = open("variable Dictionary.txt",'r')
+var = g.read()
+var = var.replace(":", "").replace("'", "").replace("{", "").replace("}", "").replace(",", "")
+var = var.split(" ")
+i = 0
+j = 1
+for x in range(0,len(var), 2):
+    variables[var[i]] = var[j]
+    i = i+2
+    j = j+2
 
 def execute(code):
     print("Program Code:")
@@ -64,7 +74,7 @@ def calculate(line):
         start = line.index('*') - 1
         end = line.index('*') + 2
         temp = line[start:end]
-        temp = temp[0] * temp[2]
+        temp = int(temp[0]) * int(temp[2])
         newlist = line[0:start] + line[end:]
         newlist.insert(start, temp)
         if (len(newlist) == 1):
