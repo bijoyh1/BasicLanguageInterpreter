@@ -16,7 +16,6 @@ for x in range(0,len(var), 2):
     variables[var[i]] = var[j]
     i = i+2
     j = j+2
-
 def execute(code):
     print("Program Code:")
     for line in code:
@@ -120,5 +119,6 @@ def calculate(line):
 
 def Print(line):
     print(variablesValue.get(variables.get(line)))
-
+z = open("output.txt",'r')
+print(z.read())
 execute(code)
